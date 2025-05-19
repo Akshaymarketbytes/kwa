@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFi
 from rest_framework.filters import OrderingFilter
 from .models import Valve, ValveLog, Area
 from .serializers import ValveSerializer, ValveLogSerializer, AreaSerializer
-from .permissions import HasDeletePermission
+from .permissions import HasDeletePermission, HasEditPermission  # UPDATED: Import HasEditPermission
 
 class AreaViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Area.objects.all()
@@ -22,14 +22,14 @@ class ValveFilter(FilterSet):
 class ValveViewSet(viewsets.ModelViewSet):
     queryset = Valve.objects.all()
     serializer_class = ValveSerializer
-    permission_classes = [IsAuthenticated, HasDeletePermission]
+    permission_classes = [IsAuthenticated, HasDeletePermission, HasEditPermission]  # UPDATED: Add HasEditPermission
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = ValveFilter
     ordering_fields = ['area__area_name']
     page_name = 'valves'
 
 class ValveLogViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = ValveLog.objects.all().order_by('timestamp')  # Sort logs by timestamp ascending
+    queryset = ValveLog.objects.all().order_by('timestamp')
     serializer_class = ValveLogSerializer
     permission_classes = [IsAuthenticated]
 

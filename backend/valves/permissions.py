@@ -14,3 +14,18 @@ class HasDeletePermission(BasePermission):
             page=getattr(view, 'page_name', ''),
             can_delete=True
         ).exists()
+
+
+class HasEditPermission(BasePermission):
+    def has_permission(self, request, view):
+        if request.method != 'PUT':
+            return True
+        if request.user.is_superuser:
+            return True
+        if not request.user.role:
+            return False
+        return Permission.objects.filter(
+            role=request.user.role,
+            page=getattr(view, 'page_name', ''),
+            can_edit=True
+        ).exists()

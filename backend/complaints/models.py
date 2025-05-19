@@ -9,8 +9,7 @@ class Complaint(models.Model):
         ('processing', 'Processing'),
         ('return_for_review', 'Return for Review'),
     ]
-
-    area = models.ForeignKey('area.Area', on_delete=models.CASCADE)
+    area = models.ForeignKey('area.Area', on_delete=models.CASCADE, null=True)
     serial_no = models.CharField(max_length=255, unique=True, editable=False)
     complaint_type = models.CharField(max_length=255)
     ticket_number = models.CharField(max_length=255, unique=True, editable=False)
